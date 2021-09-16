@@ -27,17 +27,18 @@ class UserManager(models.Manager):
         password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
         return password
 
-    def validar_login(self, postData, usuario ):
+    def validar_login(self, password, usuario ):
+        print("***************** ",usuario[0].id, "****************")
         errores = {}
         if len(usuario) > 0:
-            pw_given = postData['password']
             pw_hash = usuario[0].password
 
-            if bcrypt.checkpw(pw_given.encode(), pw_hash.encode()) is False:
-                errores['pass_incorrecto'] = "password es incorrecto"
+            if bcrypt.checkpw(password.encode(), pw_hash.encode()) is False:
+                errores['pass_incorrecto'] = "Password es incorrecto"
         else:
             errores['usuario_invalido'] = "Usuario no existe"
         return errores
+
     def recuperar_password(self, postData):
         errores = {}
         if len(User.objects.filter(email=postData['email'])) > 0:

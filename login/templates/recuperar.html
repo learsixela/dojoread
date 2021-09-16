@@ -17,12 +17,26 @@
         </div>
         <br>
         <div class="container">
-            <form method="post" action="">
+            {% if messages %} {% for message in messages %}
+            <div class="container-fluid p-0">
+                <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                </div>
+            </div>
+            {% endfor %} {% endif %}
+            <form method="post" action="{% url 'cambiar_password'%}">
+                {% csrf_token %}
+                <label for="pass_actual">Ingrese contraseña actual:</label>
+                <input type="password" class="form-control" name="pass_actual">
+                <br>
                 <label for="">Ingrese su nueva contraseña:</label>
-                <input type="password" class="form-control">
+                <input type="password" class="form-control" name="pass_nueva">
                 <br>
                 <label for="">Repita su nueva contraseña:</label>
-                <input type="password" class="form-control">
+                <input type="password" class="form-control" name="pass_confirmacion">
                 <br>
                 <button type="submit" class="btn btn-primary">Cambiar</button>
             </form>

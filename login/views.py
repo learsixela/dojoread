@@ -16,7 +16,7 @@ def registrar(request):
 
 def inicio(request):
     usuario = User.objects.filter(email=request.POST['email2'])
-    errores = User.objects.validar_login(request.POST, usuario)
+    errores = User.objects.validar_login(request.POST['password'], usuario)
 
     if len(errores) > 0:
         for key, msg in errores.items():

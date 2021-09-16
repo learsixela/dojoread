@@ -52,3 +52,38 @@ def recuperar(request):
         "active_user": reg_user,
     }
     return render(request, 'recuperar.html', context)
+
+def cambiar_pass(request):
+    reg_user = User.objects.filter(id=request.session['user_id'])
+    context = {
+        "active_user": reg_user,
+    }
+
+    if len(request.POST['pass_actual']) == 0:
+        messages.error(request, "Debes ingresar tu contraseña actual")
+        return render(request, 'recuperar.html',context)
+
+    errores = User.objects.validar_login(request.POST['pass_actual'], reg_user)
+
+
+
+    if len(errores) > 0:
+        for key, msg in errores.items():
+            messages.error(request, msg)
+        return render(request, 'recuperar.html',context)
+    
+    if len(request.POST['pass_nueva']) == 0 or len(request.POST['pass_confirmacion']) == 0:
+        messages.error(request, "Debes ingresar tu nueva contraseña")
+        return render(request, 'recuperar.html',context)
+    elif request.POST['pass_nueva'] != request.POST['pass_confirmacion']:
+        messages.error(request, "Las contraseñas no coinciden")
+        return render(request, 'recuperar.html', context)
+    else:
+        reg_user[0].password = User.objects.encriptar(request.POST['pass_nueva']).decode('utf-8')
+        reg_user[0].save()
+        request.session.flush()
+        return redirect('/')
+    #validar el password actual
+
+
+    return render(request, 'recuperar.html', context)
