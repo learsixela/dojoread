@@ -15,14 +15,15 @@
         <div class="container">
 
         <h3>Agrega un nuevo titulo de libro y un review</h3>
-        <form action="/add" method="POST">
+        <form action="{% url 'insertar' %}" method="POST">
+        {% csrf_token %}
         <label for="">Titulo libro:</label>
         <input type="text" name="titulo" id="titulo" class="form-control">
         <br>
         <label for="">Autor:</label>
             <label for="">Selecciona de la lista:</label>
             <select name="sautor" id="sautor" class="form-control">
-                <option value="">Selecciona un autor</option>
+                <option value="0" selected>Selecciona un autor</option>
             </select>
             <label for="autor">O agrega un nuevo Autor:</label>
             <input type="text" name="autor" id="autor" class="form-control">
@@ -32,7 +33,7 @@
             <br>
             <label for="">Rating:</label>
             <select name="rating" id="rating" class="">
-                <option value="0">Selecciona un rating</option>
+                <option value="0" selected>Selecciona un rating</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>

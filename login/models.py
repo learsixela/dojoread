@@ -38,6 +38,13 @@ class UserManager(models.Manager):
         else:
             errores['usuario_invalido'] = "Usuario no existe"
         return errores
+    def recuperar_password(self, postData):
+        errores = {}
+        if len(User.objects.filter(email=postData['email'])) > 0:
+            pass
+        else:
+            errores['email'] = "Email no existe"
+        return errores
 
 class User(models.Model):
     id = models.AutoField(primary_key=True)
@@ -51,3 +58,17 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     #historico = models.IntegerField(default=0)
     objects = UserManager()
+
+class Autor(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=40)
+
+
+class Libro(models.Model):
+    id = models.AutoField(primary_key=True)
+    titulo = models.CharField(max_length=40)
+    autor = models.ForeignKey(Autor, on_delete=models.CASCADE,related_name="libros")
+    review = models.TextField()
+    rating = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
